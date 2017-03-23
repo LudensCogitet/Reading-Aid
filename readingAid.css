@@ -1,9 +1,9 @@
 #outerContainer{
-	width: 700px;
+	width: 100%;
 	position: absolute;
 	top: 40%;
 	left: 50%;
-	margin-left: -350px;
+	margin-left: -50%;
 }
 
 #container{
