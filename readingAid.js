@@ -1,39 +1,39 @@
 function Word(text,parent){
-    var state = "span";
-    
-    var change = function(){
-      
-      if(state == "span"){
-        let width = $(this).width() + 7;
-        let newEl = $("<input class='word' type='text' value='"+text+"'>");
-        $(this).replaceWith(newEl);
-        newEl.width(width);
-        newEl.click(change);
-        newEl.keydown(function(event){if(event.keyCode == 13)$.proxy(change,this)();});
-        newEl.focus();
-        newEl.select();
-        state = "input";
-      }
-      else if(state == "input"){
-        text = $(this).val();
-        let newEl = $("<span class='word'>"+text+"</span>");
-        $(this).replaceWith(newEl);
-        newEl.click(change);
-      
-        state = "span";
-      }
-    }
-  
-    this.getText = function(){
-      return text;
-    }
-    
-    this.getElement = function(){
-      var returnEl = $("<span class='word'>"+text+"</span>");
-      returnEl.click(change);
-      return returnEl;
-    }
-  }
+	var state = "span";
+	
+	var change = function(){
+		
+		if(state == "span"){
+			let width = $(this).width() + 7;
+			let newEl = $("<input class='word' type='text' value='"+text+"'>");
+			$(this).replaceWith(newEl);
+			newEl.width(width);
+			newEl.click(change);
+			newEl.keydown(function(event){if(event.keyCode == 13)$.proxy(change,this)();});
+			newEl.focus();
+			newEl.select();
+			state = "input";
+		}
+		else if(state == "input"){
+			text = $(this).val();
+			let newEl = $("<span class='word'>"+text+"</span>");
+			$(this).replaceWith(newEl);
+			newEl.click(change);
+		
+			state = "span";
+		}
+	}
+
+	this.getText = function(){
+		return text;
+	}
+	
+	this.getElement = function(){
+		var returnEl = $("<span class='word'>"+text+"</span>");
+		returnEl.click(change);
+		return returnEl;
+	}
+}
 
 function Sentence(text){
   var words = text.split(" ");
@@ -132,7 +132,7 @@ function FlashCard(texts){
   }
 }
 
-function SetGenerator(homeEl,setEditor,cardsDisplay){
+function SetGenerator(homeEl,cardEditor,cardsDisplay){
   var currentCard = null;
   var cards = [];
   var loadedCards = null;
@@ -145,9 +145,9 @@ function SetGenerator(homeEl,setEditor,cardsDisplay){
   var leftButton = $("<button class='leftButton' style='width: 25px;'>&#8592;</button>");
   leftButton.click(function(){
         let myBox = $(this).parent();
-        let index = myBox.prevAll(".setBoxDisplay").length;
+        let index = myBox.prevAll(".cardBoxDisplay").length;
         if(index > 0){
-          let oldLeft = myBox.prev(".setBoxDisplay");
+          let oldLeft = myBox.prev(".cardBoxDisplay");
           myBox.detach();
           oldLeft.before(myBox);
           
@@ -163,10 +163,10 @@ function SetGenerator(homeEl,setEditor,cardsDisplay){
   var rightButton = $("<button class='rightButton' style='width: 25px;'>&#8594;</button>");
   rightButton.click(function(){
         let myBox = $(this).parent();
-        let index = myBox.prevAll(".setBoxDisplay").length;
-        let numNextBoxs = myBox.nextAll(".setBoxDisplay").length;
+        let index = myBox.prevAll(".cardBoxDisplay").length;
+        let numNextBoxs = myBox.nextAll(".cardBoxDisplay").length;
         if(numNextBoxs > 0){
-          let oldRight = myBox.next(".setBoxDisplay");
+          let oldRight = myBox.next(".cardBoxDisplay");
           myBox.detach();
           oldRight.after(myBox);
           
@@ -180,7 +180,7 @@ function SetGenerator(homeEl,setEditor,cardsDisplay){
   
   var deleteButton = $("<button class='deleteButton' style='width: 60px;'>Delete</button>");
   deleteButton.click(function(){
-        let index = $(this).parent().prevAll(".setBoxDisplay").length;
+        let index = $(this).parent().prevAll(".cardBoxDisplay").length;
         
 				cards.splice(index,1);
 				
@@ -231,10 +231,10 @@ function SetGenerator(homeEl,setEditor,cardsDisplay){
                     new Sentence(textField.val()),
                     new Sentence(textField.val())];
     
-     setEditor.empty();
+     cardEditor.empty();
     
      currentCard.forEach(function(el){
-        setEditor.append(el.getElement());
+        cardEditor.append(el.getElement());
      });
     }
   });
@@ -243,7 +243,7 @@ function SetGenerator(homeEl,setEditor,cardsDisplay){
     if(currentCard != null){
       addToDisplay(currentCard);
       
-      setEditor.empty();
+      cardEditor.empty();
       cards.push(currentCard);
 			
 			changeCheckbox();
@@ -277,18 +277,18 @@ function SetGenerator(homeEl,setEditor,cardsDisplay){
 		}
 	}
 	
-  function addToDisplay(setToDisplay){
-    let setBoxDisplay = $("<div class='setBoxDisplay'>");
+  function addToDisplay(cardToDisplay){
+    let cardBoxDisplay = $("<div class='cardBoxDisplay'>");
 
-      for(let i = 0; i < setToDisplay.length; i++){
-        setBoxDisplay.append($("<div class='setBoxItem'>"+setToDisplay[i].getText()+"</div>"));
+      for(let i = 0; i < cardToDisplay.length; i++){
+        cardBoxDisplay.append($("<div class='cardBoxItem'>"+cardToDisplay[i].getText()+"</div>"));
       }
       
-      setBoxDisplay.append(leftButton.clone(true));
-      setBoxDisplay.append(deleteButton.clone(true));
-      setBoxDisplay.append(rightButton.clone(true));
+      cardBoxDisplay.append(leftButton.clone(true));
+      cardBoxDisplay.append(deleteButton.clone(true));
+      cardBoxDisplay.append(rightButton.clone(true));
       
-      cardsDisplay.append(setBoxDisplay);
+      cardsDisplay.append(cardBoxDisplay);
   }
   
   homeEl.append(textField);

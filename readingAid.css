@@ -1,3 +1,11 @@
+#outerContainer{
+	width: 700px;
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	margin-left: -350px;
+}
+
 #container{
   font-size: 2em;
 }
@@ -51,7 +59,7 @@
   background-color: black;
 }
 
-.setBoxDisplay{
+.cardBoxDisplay{
   text-align: center;
   padding: 4px;
   display: inline-block;
@@ -59,7 +67,7 @@
   margin: 2px;
 }
 
-.setBoxItem{
+.cardBoxItem{
   border-bottom: 1px solid black;
   margin-bottom: 5px;
 }
