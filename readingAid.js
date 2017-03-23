@@ -105,14 +105,11 @@ function FlashCard(texts){
     for(let i = 0; i < texts.length; i++){
       indices.push(i);
     }
-    console.log(indices,indices.length);
     
     var randIndices = []
     while(indices.length > 0){
-      console.log(indices.length);
       randIndices.push(indices.splice(Math.floor(Math.random()*indices.length),1));
     }
-    console.log(randIndices);
     
     for(let i = 0; i < randIndices.length; i++){
       let newDiv = $("<div>"+texts[randIndices[i]]+"</div>");
@@ -132,18 +129,105 @@ function FlashCard(texts){
   }
 }
 
-function SetGenerator(homeEl,cardEditor,cardsDisplay){
+function cardGenerator(homeEl,cardEditor,cardsDisplay){
   var currentCard = null;
   var cards = [];
   var loadedCards = null;
 	
   var textField = $("<input type='text'>");
   var newButton = $("<button>New</button>");
+	newButton.click(function(){
+    if(textField.val().length > 0){
+      currentCard = [new Sentence(textField.val()),
+                    new Sentence(textField.val()),
+                    new Sentence(textField.val())];
+    
+			cardEditor.empty();
+    
+			currentCard.forEach(function(el){
+      cardEditor.append(el.getElement());
+     });
+    }
+  });
+	
   var addButton = $("<button>Add</button>");
+	addButton.click(function(){
+    if(currentCard != null){
+      displayCard(currentCard);
+      
+      cardEditor.empty();
+      cards.push(currentCard);
+			
+			changeCheckbox();
+			
+      currentCard = null;
+    }
+  });
+	
 	var saveCheckbox = null;
   
-  var leftButton = $("<button class='leftButton' style='width: 25px;'>&#8592;</button>");
-  leftButton.click(function(){
+  if(!hasLocalStorage()){
+    alert("Saving is unavailable. Please allow 3rd party cookies in your browser settings and refresh this page to allow saving.");
+  }
+  else{
+		saveCheckbox = $("<div id='saveCheckbox'></input>");
+		let saveGroup = $("<div id='saveCards' class='hideOnPlay'>cards saved</div>");
+		saveCheckbox.click(function(e){
+				
+				if($(this).hasClass("checkboxChecked") == false){
+					$(this).addClass("checkboxChecked");
+			
+				if(cards.length > 0)
+					localStorage.setItem("savedCards",stringifyCards());
+				else{
+					if(localStorage.getItem("savedCards") !== null)
+						localStorage.removeItem("savedCards");
+				}
+			}
+		});
+		
+		let previousCards = localStorage.getItem("savedCards");
+    
+    if(previousCards !== null){
+      loadStringifiedCards(previousCards);
+			saveCheckbox.addClass("checkboxChecked");
+		}
+		
+		saveGroup.append(saveCheckbox);
+    $("html").prepend(saveGroup);
+		
+		window.onbeforeunload = function(){
+    if(localStorage.getItem("savedCards") === null && cards.length !== 0 || loadedCards != stringifyCards() && saveCheckbox.hasClass("checkboxChecked") == false)
+			return "Are you sure? The current set of flash cards has changed since the last save.";
+		}
+  }
+  
+	function changeCheckbox(){
+		if(saveCheckbox == null)
+			return false;
+		else{
+			let stringyCards = stringifyCards();
+			let saved = localStorage.getItem("savedCards");
+			if(saved !== null){
+				if(saved == stringyCards)
+					saveCheckbox.addClass("checkboxChecked");
+				else
+					saveCheckbox.removeClass("checkboxChecked");
+			}
+			else if(loadedCards !== null){
+				if(loadedCards == stringyCards)
+					saveCheckbox.addClass("checkboxChecked");
+				else
+					saveCheckbox.removeClass("checkboxChecked");
+			}
+			else
+				saveCheckbox.removeClass("checkboxChecked");
+		}
+	}
+  
+	function displayCard(card){
+	  var leftButton = $("<button class='leftButton' style='width: 25px;'>&#8592;</button>");
+		leftButton.click(function(){
         let myBox = $(this).parent();
         let index = myBox.prevAll(".cardBoxDisplay").length;
         if(index > 0){
@@ -188,109 +272,20 @@ function SetGenerator(homeEl,cardEditor,cardsDisplay){
         
 				$(this).parent().remove();
       });
-  
-  if(!hasLocalStorage()){
-    alert("Saving is unavailable. Please allow 3rd party cookies in your browser settings and refresh this page to allow saving.");
-  }
-  else{
-		saveCheckbox = $("<div id='saveCheckbox'></input>");
-		let saveGroup = $("<div id='saveCards' class='hideOnPlay'>cards saved</div>");
-		saveCheckbox.click(function(e){
-				
-				if($(this).hasClass("checkboxChecked") == false){
-					$(this).addClass("checkboxChecked");
-			
-				if(cards.length > 0)
-					localStorage.setItem("savedCards",stringifyCards());
-				else{
-					if(localStorage.getItem("savedCards") !== null)
-						localStorage.removeItem("savedCards");
-				}
-			}
-		});
-		
-		let previousCards = localStorage.getItem("savedCards");
-    
-    if(previousCards !== null){
-      loadStringifiedCards(previousCards);
-			saveCheckbox.addClass("checkboxChecked");
-		}
-		
-		saveGroup.append(saveCheckbox);
-    $("html").prepend(saveGroup);
-		
-		window.onbeforeunload = function(){
-    if(localStorage.getItem("savedCards") === null && cards.length !== 0 || loadedCards != stringifyCards() && saveCheckbox.hasClass("checkboxChecked") == false)
-			return "Are you sure? The current set of flash cards has changed since the last save.";
-		}
-  }
-	
-	newButton.click(function(){
-    if(textField.val().length > 0){
-      currentCard = [new Sentence(textField.val()),
-                    new Sentence(textField.val()),
-                    new Sentence(textField.val())];
-    
-     cardEditor.empty();
-    
-     currentCard.forEach(function(el){
-        cardEditor.append(el.getElement());
-     });
-    }
-  });
-  
-  addButton.click(function(){
-    if(currentCard != null){
-      addToDisplay(currentCard);
-      
-      cardEditor.empty();
-      cards.push(currentCard);
-			
-			changeCheckbox();
-			
-      currentCard = null;
-    }
-  });
-  
-	function changeCheckbox(){
-		if(saveCheckbox == null)
-			return false;
-		else{
-			let stringyCards = stringifyCards();
-			let saved = localStorage.getItem("savedCards");
-			console.log("changeCheck",saved,stringyCards);
-			if(saved !== null){
-				console.log(saved == stringyCards);
-				if(saved == stringyCards)
-					saveCheckbox.addClass("checkboxChecked");
-				else
-					saveCheckbox.removeClass("checkboxChecked");
-			}
-			else if(loadedCards !== null){
-				if(loadedCards == stringyCards)
-					saveCheckbox.addClass("checkboxChecked");
-				else
-					saveCheckbox.removeClass("checkboxChecked");
-			}
-			else
-				saveCheckbox.removeClass("checkboxChecked");
-		}
+
+	let cardBoxDisplay = $("<div class='cardBoxDisplay'>");
+
+	for(let i = 0; i < card.length; i++){
+		cardBoxDisplay.append($("<div class='cardBoxItem'>"+card[i].getText()+"</div>"));
 	}
 	
-  function addToDisplay(cardToDisplay){
-    let cardBoxDisplay = $("<div class='cardBoxDisplay'>");
-
-      for(let i = 0; i < cardToDisplay.length; i++){
-        cardBoxDisplay.append($("<div class='cardBoxItem'>"+cardToDisplay[i].getText()+"</div>"));
-      }
-      
-      cardBoxDisplay.append(leftButton.clone(true));
-      cardBoxDisplay.append(deleteButton.clone(true));
-      cardBoxDisplay.append(rightButton.clone(true));
-      
-      cardsDisplay.append(cardBoxDisplay);
-  }
-  
+	cardBoxDisplay.append(leftButton);
+	cardBoxDisplay.append(deleteButton);
+	cardBoxDisplay.append(rightButton);
+	
+	cardsDisplay.append(cardBoxDisplay);
+}
+	
   homeEl.append(textField);
   homeEl.append(newButton);
   homeEl.append(addButton);
@@ -336,16 +331,14 @@ function SetGenerator(homeEl,cardEditor,cardsDisplay){
   function loadStringifiedCards(textArray){
     loadedCards = textArray.slice(0);
 		textArray = JSON.parse(textArray);
-		console.log(textArray);
     cards = [];
     for(let i = 0; i < textArray.length; i++){
-      var newSet = [];
+      var newCard = [];
       for(let d = 0; d < textArray[i].length; d++){
-        newSet.push(new Sentence(textArray[i][d]));
+        newCard.push(new Sentence(textArray[i][d]));
       }
-			console.log(newSet);
-      cards.push(newSet);
-      addToDisplay(newSet);
+      cards.push(newCard);
+      displayCard(newCard);
     }
   }
 }
@@ -353,10 +346,8 @@ function SetGenerator(homeEl,cardEditor,cardsDisplay){
 function hasLocalStorage(){
   var test = "test";
   try{
-    console.log(localStorage.getItem("savedCards"));
     localStorage.setItem(test,test);
     if(localStorage.getItem(test) == "test"){
-			console.log(localStorage.getItem(test));
       localStorage.removeItem(test);
     }
     return true;
@@ -370,7 +361,7 @@ function hasLocalStorage(){
 $(document).ready(function(){
   $("#again").hide();
   var stateOfPlay = 0;
-  var generator = new SetGenerator($("#generatorHome"),$("#container"),$("#cardsDisplay"));
+  var generator = new CardGenerator($("#generatorHome"),$("#container"),$("#cardsDisplay"));
   
   var currentCard = 0;
   var cards = null;
@@ -380,7 +371,6 @@ $(document).ready(function(){
   $("#start").click(function(){
     if(stateOfPlay == 0){
       cards = generator.getCards();
-      console.log(cards);
       if(cards != null){
 				$(".hideOnPlay").hide();
         $("#container").empty();
