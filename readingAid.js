@@ -63,7 +63,7 @@ function Sentence(text){
   }
 }
 
-function SentenceSet(texts){  
+function FlashCard(texts){  
   function quiz(targetEl,randOrder){
     var index = Math.floor(Math.random() * randOrder.length);
     var displayDiv = $("<div>"+texts[randOrder[index]]+"</div>");
@@ -132,10 +132,10 @@ function SentenceSet(texts){
   }
 }
 
-function SetGenerator(homeEl,setEditor,setsDisplay){
-  var currentSet = null;
-  var sets = [];
-  var loadedSets = null;
+function SetGenerator(homeEl,setEditor,cardsDisplay){
+  var currentCard = null;
+  var cards = [];
+  var loadedCards = null;
 	
   var textField = $("<input type='text'>");
   var newButton = $("<button>New</button>");
@@ -151,9 +151,9 @@ function SetGenerator(homeEl,setEditor,setsDisplay){
           myBox.detach();
           oldLeft.before(myBox);
           
-          temp = sets[index-1];
-          sets[index-1] = sets[index];
-          sets[index] = temp;
+          temp = cards[index-1];
+          cards[index-1] = cards[index];
+          cards[index] = temp;
 					
 					changeCheckbox();
 						
@@ -170,9 +170,9 @@ function SetGenerator(homeEl,setEditor,setsDisplay){
           myBox.detach();
           oldRight.after(myBox);
           
-          temp = sets[index];
-          sets[index] = sets[index+1];
-          sets[index+1] = temp;
+          temp = cards[index];
+          cards[index] = cards[index+1];
+          cards[index+1] = temp;
 					
 					changeCheckbox();
         }
@@ -182,7 +182,7 @@ function SetGenerator(homeEl,setEditor,setsDisplay){
   deleteButton.click(function(){
         let index = $(this).parent().prevAll(".setBoxDisplay").length;
         
-				sets.splice(index,1);
+				cards.splice(index,1);
 				
 				changeCheckbox();
         
@@ -194,25 +194,25 @@ function SetGenerator(homeEl,setEditor,setsDisplay){
   }
   else{
 		saveCheckbox = $("<div id='saveCheckbox'></input>");
-		let saveGroup = $("<div id='saveSets' class='hideOnPlay'>cards saved</div>");
+		let saveGroup = $("<div id='saveCards' class='hideOnPlay'>cards saved</div>");
 		saveCheckbox.click(function(e){
 				
 				if($(this).hasClass("checkboxChecked") == false){
 					$(this).addClass("checkboxChecked");
 			
-				if(sets.length > 0)
-					localStorage.setItem("savedSets",stringifySets());
+				if(cards.length > 0)
+					localStorage.setItem("savedCards",stringifyCards());
 				else{
-					if(localStorage.getItem("savedSets") !== null)
-						localStorage.removeItem("savedSets");
+					if(localStorage.getItem("savedCards") !== null)
+						localStorage.removeItem("savedCards");
 				}
 			}
 		});
 		
-		let previousSets = localStorage.getItem("savedSets");
+		let previousCards = localStorage.getItem("savedCards");
     
-    if(previousSets !== null){
-      loadStringifiedSets(previousSets);
+    if(previousCards !== null){
+      loadStringifiedCards(previousCards);
 			saveCheckbox.addClass("checkboxChecked");
 		}
 		
@@ -220,35 +220,35 @@ function SetGenerator(homeEl,setEditor,setsDisplay){
     $("html").prepend(saveGroup);
 		
 		window.onbeforeunload = function(){
-    if(localStorage.getItem("savedSets") === null && sets.length !== 0 || loadedSets != stringifySets() && saveCheckbox.hasClass("checkboxChecked") == false)
+    if(localStorage.getItem("savedCards") === null && cards.length !== 0 || loadedCards != stringifyCards() && saveCheckbox.hasClass("checkboxChecked") == false)
 			return "Are you sure? The current set of flash cards has changed since the last save.";
 		}
   }
 	
 	newButton.click(function(){
     if(textField.val().length > 0){
-      currentSet = [new Sentence(textField.val()),
+      currentCard = [new Sentence(textField.val()),
                     new Sentence(textField.val()),
                     new Sentence(textField.val())];
     
      setEditor.empty();
     
-     currentSet.forEach(function(el){
+     currentCard.forEach(function(el){
         setEditor.append(el.getElement());
      });
     }
   });
   
   addButton.click(function(){
-    if(currentSet != null){
-      addToDisplay(currentSet);
+    if(currentCard != null){
+      addToDisplay(currentCard);
       
       setEditor.empty();
-      sets.push(currentSet);
+      cards.push(currentCard);
 			
 			changeCheckbox();
 			
-      currentSet = null;
+      currentCard = null;
     }
   });
   
@@ -256,18 +256,18 @@ function SetGenerator(homeEl,setEditor,setsDisplay){
 		if(saveCheckbox == null)
 			return false;
 		else{
-			let stringySets = stringifySets();
-			let saved = localStorage.getItem("savedSets");
-			console.log("changeCheck",saved,stringySets);
+			let stringyCards = stringifyCards();
+			let saved = localStorage.getItem("savedCards");
+			console.log("changeCheck",saved,stringyCards);
 			if(saved !== null){
-				console.log(saved == stringySets);
-				if(saved == stringySets)
+				console.log(saved == stringyCards);
+				if(saved == stringyCards)
 					saveCheckbox.addClass("checkboxChecked");
 				else
 					saveCheckbox.removeClass("checkboxChecked");
 			}
-			else if(loadedSets !== null){
-				if(loadedSets == stringySets)
+			else if(loadedCards !== null){
+				if(loadedCards == stringyCards)
 					saveCheckbox.addClass("checkboxChecked");
 				else
 					saveCheckbox.removeClass("checkboxChecked");
@@ -288,22 +288,22 @@ function SetGenerator(homeEl,setEditor,setsDisplay){
       setBoxDisplay.append(deleteButton.clone(true));
       setBoxDisplay.append(rightButton.clone(true));
       
-      setsDisplay.append(setBoxDisplay);
+      cardsDisplay.append(setBoxDisplay);
   }
   
   homeEl.append(textField);
   homeEl.append(newButton);
   homeEl.append(addButton);
   
-  this.getSets = function(){
+  this.getCards = function(){
     var arr = [];
     
-    for(let i = 0; i < sets.length; i++){
+    for(let i = 0; i < cards.length; i++){
       let textArr = [];
-      for(let d = 0; d < sets[i].length; d++){
-        textArr.push(sets[i][d].getText());
+      for(let d = 0; d < cards[i].length; d++){
+        textArr.push(cards[i][d].getText());
       }
-      arr.push(new SentenceSet(textArr));
+      arr.push(new FlashCard(textArr));
     }
     
     if(arr.length == 0)
@@ -312,39 +312,39 @@ function SetGenerator(homeEl,setEditor,setsDisplay){
       return arr;
   }
 
-  this.clearSets = function(){
-    sets = [];
+  this.clearCards = function(){
+    cards = [];
   }
   
-  function stringifySets(){
+  function stringifyCards(){
     
-		if(sets.length == 0)
+		if(cards.length == 0)
 			return null;
 		
 		var stringify = [];
     
-    for(let i = 0; i < sets.length; i++){
+    for(let i = 0; i < cards.length; i++){
       var stringSet = [];
-      for(let d = 0; d < sets[i].length; d++){
-        stringSet.push(sets[i][d].getText());
+      for(let d = 0; d < cards[i].length; d++){
+        stringSet.push(cards[i][d].getText());
       }
       stringify.push(stringSet);
     }
     return JSON.stringify(stringify);
   }
   
-  function loadStringifiedSets(textArray){
-    loadedSets = textArray.slice(0);
+  function loadStringifiedCards(textArray){
+    loadedCards = textArray.slice(0);
 		textArray = JSON.parse(textArray);
 		console.log(textArray);
-    sets = [];
+    cards = [];
     for(let i = 0; i < textArray.length; i++){
       var newSet = [];
       for(let d = 0; d < textArray[i].length; d++){
         newSet.push(new Sentence(textArray[i][d]));
       }
 			console.log(newSet);
-      sets.push(newSet);
+      cards.push(newSet);
       addToDisplay(newSet);
     }
   }
@@ -353,7 +353,7 @@ function SetGenerator(homeEl,setEditor,setsDisplay){
 function hasLocalStorage(){
   var test = "test";
   try{
-    console.log(localStorage.getItem("savedSets"));
+    console.log(localStorage.getItem("savedCards"));
     localStorage.setItem(test,test);
     if(localStorage.getItem(test) == "test"){
 			console.log(localStorage.getItem(test));
@@ -370,7 +370,7 @@ function hasLocalStorage(){
 $(document).ready(function(){
   $("#again").hide();
   var stateOfPlay = 0;
-  var generator = new SetGenerator($("#generatorHome"),$("#container"),$("#setsDisplay"));
+  var generator = new SetGenerator($("#generatorHome"),$("#container"),$("#cardsDisplay"));
   
   var currentCard = 0;
   var cards = null;
@@ -379,7 +379,7 @@ $(document).ready(function(){
   
   $("#start").click(function(){
     if(stateOfPlay == 0){
-      cards = generator.getSets();
+      cards = generator.getCards();
       console.log(cards);
       if(cards != null){
 				$(".hideOnPlay").hide();
@@ -408,7 +408,7 @@ $(document).ready(function(){
         playReturn == null;
       }
       
-      $("#setsDisplayContainer").show();
+      $("#cardsDisplayContainer").show();
       stateOfPlay = 0;
     }
   });

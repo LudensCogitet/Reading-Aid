@@ -2,7 +2,7 @@
   font-size: 2em;
 }
 
-#setsDisplayContainer{
+#cardsDisplayContainer{
   position: absolute;
   bottom: 10px;
   left: -400px;
@@ -14,7 +14,7 @@
   overflow-x: auto;
 }
 
-#saveSets{
+#saveCards{
 	position: absolute;
 	width: 130px;
 	height: 30px;
