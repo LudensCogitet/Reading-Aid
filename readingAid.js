@@ -164,6 +164,10 @@ function CardGenerator(homeEl,cardEditor,cardsDisplay){
     }
   });
 	
+	homeEl.append(textField);
+  homeEl.append(newButton);
+  homeEl.append(addButton);
+	
 	var saveCheckbox = null;
   
   if(!hasLocalStorage()){
@@ -226,69 +230,65 @@ function CardGenerator(homeEl,cardEditor,cardsDisplay){
 	}
   
 	function displayCard(card){
-	  var leftButton = $("<button class='leftButton' style='width: 25px;'>&#8592;</button>");
-		leftButton.click(function(){
-        let myBox = $(this).parent();
-        let index = myBox.prevAll(".cardBoxDisplay").length;
-        if(index > 0){
-          let oldLeft = myBox.prev(".cardBoxDisplay");
-          myBox.detach();
-          oldLeft.before(myBox);
-          
-          temp = cards[index-1];
-          cards[index-1] = cards[index];
-          cards[index] = temp;
-					
-					changeCheckbox();
+			var leftButton = $("<button class='leftButton' style='width: 25px;'>&#8592;</button>");
+			leftButton.click(function(){
+					let myBox = $(this).parent();
+					let index = myBox.prevAll(".cardBoxDisplay").length;
+					if(index > 0){
+						let oldLeft = myBox.prev(".cardBoxDisplay");
+						myBox.detach();
+						oldLeft.before(myBox);
 						
-				}
-      });
-  
-  var rightButton = $("<button class='rightButton' style='width: 25px;'>&#8594;</button>");
-  rightButton.click(function(){
-        let myBox = $(this).parent();
-        let index = myBox.prevAll(".cardBoxDisplay").length;
-        let numNextBoxs = myBox.nextAll(".cardBoxDisplay").length;
-        if(numNextBoxs > 0){
-          let oldRight = myBox.next(".cardBoxDisplay");
-          myBox.detach();
-          oldRight.after(myBox);
-          
-          temp = cards[index];
-          cards[index] = cards[index+1];
-          cards[index+1] = temp;
+						temp = cards[index-1];
+						cards[index-1] = cards[index];
+						cards[index] = temp;
+						
+						changeCheckbox();
+							
+					}
+				});
+		
+			var rightButton = $("<button class='rightButton' style='width: 25px;'>&#8594;</button>");
+			rightButton.click(function(){
+					let myBox = $(this).parent();
+					let index = myBox.prevAll(".cardBoxDisplay").length;
+					let numNextBoxs = myBox.nextAll(".cardBoxDisplay").length;
+					if(numNextBoxs > 0){
+						let oldRight = myBox.next(".cardBoxDisplay");
+						myBox.detach();
+						oldRight.after(myBox);
+						
+						temp = cards[index];
+						cards[index] = cards[index+1];
+						cards[index+1] = temp;
+						
+						changeCheckbox();
+					}
+				});
+		
+			var deleteButton = $("<button class='deleteButton' style='width: 60px;'>Delete</button>");
+			deleteButton.click(function(){
+					let index = $(this).parent().prevAll(".cardBoxDisplay").length;
+					
+					cards.splice(index,1);
 					
 					changeCheckbox();
-        }
-      });
-  
-  var deleteButton = $("<button class='deleteButton' style='width: 60px;'>Delete</button>");
-  deleteButton.click(function(){
-        let index = $(this).parent().prevAll(".cardBoxDisplay").length;
-        
-				cards.splice(index,1);
-				
-				changeCheckbox();
-        
-				$(this).parent().remove();
-      });
+					
+					$(this).parent().remove();
+				});
 
-	let cardBoxDisplay = $("<div class='cardBoxDisplay'>");
+			let cardBoxDisplay = $("<div class='cardBoxDisplay'>");
 
-	for(let i = 0; i < card.length; i++){
-		cardBoxDisplay.append($("<div class='cardBoxItem'>"+card[i].getText()+"</div>"));
+			for(let i = 0; i < card.length; i++){
+				cardBoxDisplay.append($("<div class='cardBoxItem'>"+card[i].getText()+"</div>"));
+			}
+		
+		cardBoxDisplay.append(leftButton);
+		cardBoxDisplay.append(deleteButton);
+		cardBoxDisplay.append(rightButton);
+		
+		cardsDisplay.append(cardBoxDisplay);
 	}
-	
-	cardBoxDisplay.append(leftButton);
-	cardBoxDisplay.append(deleteButton);
-	cardBoxDisplay.append(rightButton);
-	
-	cardsDisplay.append(cardBoxDisplay);
-}
-	
-  homeEl.append(textField);
-  homeEl.append(newButton);
-  homeEl.append(addButton);
   
   this.getCards = function(){
     var arr = [];
@@ -312,7 +312,6 @@ function CardGenerator(homeEl,cardEditor,cardsDisplay){
   }
   
   function stringifyCards(){
-    
 		if(cards.length == 0)
 			return null;
 		
