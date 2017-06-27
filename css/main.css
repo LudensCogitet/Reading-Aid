@@ -1,0 +1,15 @@
+body, html, .container{
+  height: 100%;
+}
+
+#root{
+  background-color: rgb(210,230,215);
+}
+
+#mainMenuButton{
+  float: right;
+}
+
+textarea{
+  height: 500px !important;
+}
