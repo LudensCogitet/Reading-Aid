@@ -47,9 +47,9 @@ function Flashcard(sentences){
 
     card.prepend("<div class='quiz-heading'>"+workingSentences[answer]+"</div>");
 
-    card.children('[data-index=0]').html("<button class='pure-button quiz-button'>Top</button>");
-    card.children('[data-index=1]').html("<button class='pure-button quiz-button'>Middle</button>");
-    card.children('[data-index=2]').html("<button class='pure-button quiz-button'>Bottom</button>");
+    card.children('[data-index=0]').html("<button type='button' class='btn btn-default'>Top</button>");
+    card.children('[data-index=1]').html("<button type='button' class='btn btn-default'>Middle</button>");
+    card.children('[data-index=2]').html("<button type='button' class='btn btn-default'>Bottom</button>");
 
     workingSentences.forEach((el,index)=>{
       let thisElement = card.children('[data-index='+index+']').children('button');
@@ -79,7 +79,8 @@ class App{
     this.menus = {'current': null,
                   'main': new MainMenu('main',rootDiv,this),
                   'newCards': new NewCardsMenu('newCards',rootDiv,this),
-                  'SetSelect': new SetSelectMenu('SetSelect',rootDiv,this),
+                  'setSelect': new SetSelectMenu('setSelect',rootDiv,this),
+                  'play': new Play('play',rootDiv,this),
                   changeCurrent: (name)=>{this.menus['current'] = this.menus.hasOwnProperty(name) ? this.menus[name] : this.menus['current'];}
                  };
 

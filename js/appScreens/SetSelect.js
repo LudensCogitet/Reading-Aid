@@ -46,6 +46,10 @@ class SetSelectMenu extends AppScreen{
         this.container.find('#selectSetSubheading').text('you wish to edit');
         this.menu.find('.cardSetMenuItem').click((event)=>{this.loadCards('newCards',event);});
       }
+      else if(selectType === 'play'){
+        this.container.find('#selectSetSubheading').text('you wish to play');
+        this.menu.find('.cardSetMenuItem').click((event)=>{this.loadCards('play',event);});
+      }
       super.load().then((message)=>{if(message === 'loaded') resolve('loaded');});
     });
   }

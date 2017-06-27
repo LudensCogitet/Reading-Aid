@@ -15,7 +15,7 @@ class MainMenu extends AppScreen{
     newMenuItem = this.menuItem.clone();
     newMenuItem.text('Edit Flashcards');
     newMenuItem.click(()=>{
-        this.unload().then(()=>{this.app.load('SetSelect',['edit']);});
+        this.unload().then(()=>{this.app.load('setSelect',['edit']);});
       });
 
     this.menu.append(newMenuItem);
@@ -24,6 +24,10 @@ class MainMenu extends AppScreen{
     newMenuItem.removeClass('btn-default');
     newMenuItem.addClass('btn-primary');
     newMenuItem.text('Play');
+
+    newMenuItem.click(()=>{
+      this.unload().then(()=>{this.app.load('setSelect',['play'])});
+    });
 
     this.menu.append(newMenuItem);
 
