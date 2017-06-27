@@ -25,6 +25,15 @@ class SetSelectMenu extends AppScreen{
     });
   }
 
+  loadCards(toLoad,event){
+    var setName = $(event.target).text();
+    this.unload().then((message)=>{
+      if(message === 'unloaded'){
+        this.app.load(toLoad,[setName,this.app.cardSetManager.getCardSet(setName)]);
+      }
+    });
+  }
+
   load(selectType){
     return new Promise((resolve,reject)=>{
       if(!selectType){
@@ -35,15 +44,7 @@ class SetSelectMenu extends AppScreen{
       this.updateCardSetMenu();
       if(selectType === 'edit'){
         this.container.find('#selectSetSubheading').text('you wish to edit');
-        this.menu.find('.cardSetMenuItem').click((event)=>{
-          var setName = $(event.target).text();
-          console.log(setName);
-          this.unload().then((message)=>{
-            if(message === 'unloaded'){
-              this.app.load('newCards',[setName,this.app.cardSetManager.getCardSet(setName)]);
-            }
-          });
-        });
+        this.menu.find('.cardSetMenuItem').click((event)=>{this.loadCards('newCards',event);});
       }
       super.load().then((message)=>{if(message === 'loaded') resolve('loaded');});
     });
