@@ -18,8 +18,8 @@ class NewCardsMenu extends AppScreen{
     var saveButtonContainer = $('<div class="row"><div style="text-align: center;"></div></div>');
     var saveButton = $('<button class="btn btn-primary">Save Set</button>');
 
-    saveButton.click(function(){
-      makeCardSet($("#newCardSetName").val(),$("#newCardSetText").val());
+    saveButton.click(()=>{
+      this.app.cardSetManager.makeCardSet($("#newCardSetName").val(),$("#newCardSetText").val());
     });
 
     saveButtonContainer.append(saveButton);
@@ -36,7 +36,16 @@ class NewCardsMenu extends AppScreen{
       if(arguments.length == 2){
         this.titleWord.html('Edit');
         this.nameField.val(arguments[0]);
-        this.textField.val(arguments[1]);
+
+        var text = arguments[1];
+        if($.isArray(text)){
+          text = text.map(el=>{
+            return el.join('\n');
+          });
+          text = text.join('\n\n');
+        }
+
+        this.textField.val(text);
       }
       super.load().then(()=>{resolve('loaded');});
     });

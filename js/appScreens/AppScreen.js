@@ -5,6 +5,9 @@ class AppScreen{
     this.container = $('<div style="text-align: center; width: 100%;">');
     this.container.hide();
 
+    this.menu = $('<div class="btn-group-vertical" role="group">');
+    this.menuItem = $('<button type="button" class="btn btn-default">');
+
     this.name = name;
     this.app = app;
 
