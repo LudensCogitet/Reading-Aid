@@ -34,6 +34,14 @@ class SetSelectMenu extends AppScreen{
     });
   }
 
+  deleteCards(event){
+    console.log('getting ready to delete');
+    var setName = $(event.target).text();
+    this.app.cardSetManager.deleteCardSet(setName);
+    this.updateCardSetMenu();
+    this.menu.find('.cardSetMenuItem').click((event)=>{this.deleteCards(event);});
+  }
+
   load(selectType){
     return new Promise((resolve,reject)=>{
       if(!selectType){
@@ -49,6 +57,11 @@ class SetSelectMenu extends AppScreen{
       else if(selectType === 'play'){
         this.container.find('#selectSetSubheading').text('you wish to play');
         this.menu.find('.cardSetMenuItem').click((event)=>{this.loadCards('play',event);});
+      }
+      else if(selectType === 'delete'){
+        console.log('At delete setup');
+        this.container.find('#selectSetSubheading').text('you wish to delete');
+        this.menu.find('.cardSetMenuItem').click((event)=>{this.deleteCards(event);});
       }
       super.load().then((message)=>{if(message === 'loaded') resolve('loaded');});
     });

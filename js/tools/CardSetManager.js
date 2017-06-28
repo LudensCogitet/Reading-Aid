@@ -45,15 +45,29 @@ class CardSetManager{
       return [];
   }
 
-  updateSavedCardSetList(name){
+  updateSavedCardSetList(name, action = 'add'){
     var currentList = this.getSavedCardSetList();
-    if(currentList.indexOf(name) === -1){
-      currentList.push(name);
-      localStorage.setItem('_flashSight_!setList!',currentList.join(","));
+    if(action === 'add'){
+      if(currentList.indexOf(name) === -1){
+        currentList.push(name);
+        localStorage.setItem('_flashSight_!setList!',currentList.join(","));
+      }
+    }
+    else if(action === 'remove'){
+      if(currentList.indexOf(name) !== -1){
+        currentList.splice(currentList.indexOf(name),1);
+        localStorage.setItem('_flashSight_!setList!',currentList.join(","));
+      }
     }
   }
 
   getCardSet(name){
     return JSON.parse(localStorage.getItem('_flashSight_'+name));
+  }
+
+  deleteCardSet(name){
+    console.log('in set manager card delete');
+    this.updateSavedCardSetList(name,'remove');
+    localStorage.removeItem('_flashSight_'+name);
   }
 }

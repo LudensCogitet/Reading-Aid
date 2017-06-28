@@ -21,6 +21,14 @@ class MainMenu extends AppScreen{
     this.menu.append(newMenuItem);
 
     newMenuItem = this.menuItem.clone();
+    newMenuItem.text('Delete Flashcards');
+    newMenuItem.click(()=>{
+        this.unload().then(()=>{this.app.load('setSelect',['delete']);});
+      });
+
+    this.menu.append(newMenuItem);
+
+    newMenuItem = this.menuItem.clone();
     newMenuItem.removeClass('btn-default');
     newMenuItem.addClass('btn-primary');
     newMenuItem.text('Play');
