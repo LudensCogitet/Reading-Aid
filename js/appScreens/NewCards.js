@@ -11,15 +11,29 @@ class NewCardsMenu extends AppScreen{
                 '</div></div></div>');
 
     this.titleWord = title.find('#titleWord');
-    console.log(this.titleWord);
     this.nameField = content.find('#newCardSetName');
     this.textField = content.find('#newCardSetText');
+
+    this.nameFieldOnLoad = '';
+    this.newSet = true;
 
     var saveButtonContainer = $('<div class="row"><div style="text-align: center;"></div></div>');
     var saveButton = $('<button class="btn btn-primary">Save Set</button>');
 
     saveButton.click(()=>{
-      this.app.cardSetManager.makeCardSet($("#newCardSetName").val(),$("#newCardSetText").val());
+      if(this.app.cardSetManager.makeCardSet($("#newCardSetName").val(),$("#newCardSetText").val(),this.newSet)){
+        if(this.newSet){
+          alert('Card set saved');
+          this.clearFields();
+        }
+        else{
+          if(this.nameFieldOnLoad !== this.nameField.val()){
+            this.app.cardSetManager.deleteCardSet(this.nameFieldOnLoad);
+            this.nameFieldOnLoad = this.nameField.val();
+          }
+          alert('Card set updated') ;
+        }
+      }
     });
 
     saveButtonContainer.append(saveButton);
@@ -31,11 +45,18 @@ class NewCardsMenu extends AppScreen{
     this.parentDiv.append(this.container);
   }
 
+  clearFields(){
+    this.nameField.val('');
+    this.textField.val('');
+  }
+
   load(){
     return new Promise((resolve,reject)=>{
       if(arguments.length == 2){
         this.titleWord.html('Edit');
         this.nameField.val(arguments[0]);
+        this.newSet = false;
+        this.nameFieldOnLoad = arguments[0];
 
         var text = arguments[1];
         if($.isArray(text)){
@@ -47,6 +68,9 @@ class NewCardsMenu extends AppScreen{
 
         this.textField.val(text);
       }
+      else {
+        this.newSet = true;
+      }
       super.load().then(()=>{resolve('loaded');});
     });
   }
@@ -55,8 +79,7 @@ class NewCardsMenu extends AppScreen{
     return new Promise((resolve,reject)=>{
       super.unload().then(()=>{
         this.titleWord.html('New');
-        this.nameField.val('');
-        this.textField.val('');
+        this.clearFields();
         resolve('unloaded');
       });
     });

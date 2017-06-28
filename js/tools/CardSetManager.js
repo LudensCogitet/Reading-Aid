@@ -1,10 +1,10 @@
 class CardSetManager{
-  makeCardSet(name,text){
+  makeCardSet(name,text,checkOverwrite = true){
       var proceed = true;
 
       if(name == '' || text == ''){
         alert("Please fill out both fields.");
-        return;
+        return false;
       }
 
       var cards = text.split(/[\n]{2,}/);
@@ -21,20 +21,24 @@ class CardSetManager{
 
       if(proceed == false){
         alert('Please make sure each set contains exactly 3 sentences seperated by new lines, and that each set is seperated by an empty line.');
-        return;
+        return false;
       }
 
-      console.log(localStorage['_flashSight_'+name]);
-      if(localStorage.getItem('_flashSight_'+name)){
-        proceed = confirm('Card Set "'+name+'" already exists. Overwrite?');
+      if(checkOverwrite === true){
+        if(localStorage.getItem('_flashSight_'+name)){
+          proceed = confirm('Card Set "'+name+'" already exists. Overwrite?');
+        }
       }
 
       if(proceed){
         this.updateSavedCardSetList(name);
         localStorage.setItem('_flashSight_'+name,JSON.stringify(cards));
+        if(localStorage.getItem('_flashSight_'+name))
+          return true;
       }
       else{
         alert('New Flashcard set canceled');
+        return false;
       }
     }
 
@@ -66,7 +70,6 @@ class CardSetManager{
   }
 
   deleteCardSet(name){
-    console.log('in set manager card delete');
     this.updateSavedCardSetList(name,'remove');
     localStorage.removeItem('_flashSight_'+name);
   }
