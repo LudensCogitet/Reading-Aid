@@ -70,7 +70,12 @@ class CardSetManager{
   }
 
   deleteCardSet(name){
-    this.updateSavedCardSetList(name,'remove');
-    localStorage.removeItem('_flashSight_'+name);
+    if(confirm('Are use sure you wish to delete "'+name+'"?')){
+      this.updateSavedCardSetList(name,'remove');
+      localStorage.removeItem('_flashSight_'+name);
+      if(!localStorage.getItem('_flashSight_'+name))
+        return true;
+    }
+    return false;
   }
 }

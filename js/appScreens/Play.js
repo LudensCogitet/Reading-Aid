@@ -5,12 +5,42 @@ class Play extends AppScreen{
     this.duration = 5000;
 
     this.flashcardTarget = $('<div id="flashcardTarget"><h3>Click the play button to begin<h3></div>');
+    this.flashcardTarget.hide();
 
     this.cardSetName = null;
     this.cardSetData = null;
 
     this.currentCard = -1;
     this.currentCardSet = null;
+
+    this.menu.append('<div><h3>Select Flashcard Duration</h3></div>')
+
+    var newMenuItem = this.menuItem.clone();
+    newMenuItem.text('3');
+    newMenuItem.click(()=>{
+      this.startPlay(3);
+    });
+
+    this.menu.append(newMenuItem);
+
+    newMenuItem = this.menuItem.clone();
+    newMenuItem.text('5');
+    newMenuItem.click(()=>{
+      this.startPlay(5);
+    });
+
+    this.menu.append(newMenuItem);
+
+    newMenuItem = this.menuItem.clone();
+    newMenuItem.text('7');
+    newMenuItem.click(()=>{
+      this.startPlay(7);
+    });
+
+    this.menu.append(newMenuItem);
+
+    this.buttonContainer = $('<div>');
+    this.buttonContainer.hide();
 
     var prevButton = $('<button id="prev" type="button" class="btn btn-default">'+
                             '<span class="glyphicon glyphicon-backward" aria-hidden="true"></span>'+
@@ -23,6 +53,8 @@ class Play extends AppScreen{
       }
     });
 
+    this.buttonContainer.append(prevButton);
+
     var restartButton = $('<button id="restart" type="button" class="btn btn-default">'+
                             '<span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>'+
                             '</button>');
@@ -31,34 +63,37 @@ class Play extends AppScreen{
         this.unload().then(this.load);
     });
 
-    var nextButton = $('<button id="next" type="button" class="btn btn-primary">'+
-                            '<span class="glyphicon glyphicon-play" aria-hidden="true"></span>'+
-                            '</button>');
+    this.buttonContainer.append(restartButton);
 
-    nextButton.click(()=>{
+    this.nextButton = $('<button id="next" type="button" class="btn btn-primary">'+
+                        '<span class="glyphicon glyphicon-play" aria-hidden="true"></span>'+
+                        '</button>');
+
+    this.nextButton.click(()=>{
       if(this.currentCard + 1 < this.currentCardSet.length){
         this.stopCurrentCard();
         this.loadCard(this.currentCard+1)
       }
     });
 
+    this.buttonContainer.append(this.nextButton);
 
-    var stopButton = $('<button id="stop" type="button" class="btn btn-primary">'+
-                            '<span class="glyphicon glyphicon-stop" aria-hidden="true"></span>'+
-                            '</button>');
+    this.stopButton = $('<button id="stop" type="button" class="btn btn-primary">'+
+                        '<span class="glyphicon glyphicon-stop" aria-hidden="true"></span>'+
+                        '</button>');
 
-    stopButton.click(()=>{
-      this.stopCurrentCard();
+    this.stopButton.click(()=>{
       this.app.load('main');
     });
 
-    stopButton.hide();
+    this.stopButton.hide();
 
+    this.buttonContainer.append(this.stopButton);
+
+
+    this.container.append(this.menu);
     this.container.append(this.flashcardTarget);
-    this.container.append(prevButton);
-    this.container.append(restartButton);
-    this.container.append(nextButton);
-    this.container.append(stopButton);
+    this.container.append(this.buttonContainer);
 
     this.parentDiv.append(this.container);
 
@@ -67,8 +102,16 @@ class Play extends AppScreen{
     this.stopCurrentCard = this.stopCurrentCard.bind(this);
   }
 
+  startPlay(duration){
+    this.duration = duration * 1000;
+    this.menu.hide();
+    this.flashcardTarget.show();
+    this.buttonContainer.show();
+  }
+
   loadCard(cardIndex){
     this.currentCard = cardIndex;
+    this.checkIfLastCard();
 
     var currentCard = this.currentCardSet[this.currentCard];
 
@@ -79,6 +122,19 @@ class Play extends AppScreen{
   stopCurrentCard(){
     if(this.currentCard !== -1)
       this.currentCardSet[this.currentCard].reset();
+  }
+
+  checkIfLastCard(){
+    if(this.currentCard === this.currentCardSet.length -1){
+      this.nextButton.hide();
+      this.stopButton.show();
+    }
+    else{
+      if(this.nextButton.is(':hidden')){
+        this.stopButton.hide();
+        this.nextButton.show();
+      }
+    }
   }
 
   load(cardSetName = null, cardSetData = null){
@@ -93,8 +149,8 @@ class Play extends AppScreen{
       }
 
       this.currentCardSet = shuffle(cardSetData.map((el)=>{return new Flashcard(el)}));
-      console.log(this.currentCardSet);
 
+      this.checkIfLastCard();
       super.load().then((message)=>{if(message === 'loaded') resolve('loaded');});
     });
   }
@@ -106,6 +162,9 @@ class Play extends AppScreen{
             this.stopCurrentCard();
             this.currentCard = -1;
             this.currentCardSet = null;
+            this.menu.show();
+            this.flashcardTarget.hide();
+            this.buttonContainer.hide();
             this.flashcardTarget.html('<h3>Click the play button to begin<h3>');
             resolve('unloaded');
           }

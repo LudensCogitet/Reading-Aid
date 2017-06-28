@@ -35,11 +35,12 @@ class SetSelectMenu extends AppScreen{
   }
 
   deleteCards(event){
-    console.log('getting ready to delete');
     var setName = $(event.target).text();
-    this.app.cardSetManager.deleteCardSet(setName);
-    this.updateCardSetMenu();
-    this.menu.find('.cardSetMenuItem').click((event)=>{this.deleteCards(event);});
+    if(this.app.cardSetManager.deleteCardSet(setName)){
+      alert('Card set deleted');
+      this.updateCardSetMenu();
+      this.menu.find('.cardSetMenuItem').click((event)=>{this.deleteCards(event);});
+    }
   }
 
   load(selectType){

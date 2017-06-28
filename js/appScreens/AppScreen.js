@@ -2,7 +2,7 @@ class AppScreen{
   constructor(name, parentDiv, app){
     this.parentDiv = $(parentDiv);
 
-    this.container = $('<div style="text-align: center; width: 100%;">');
+    this.container = $('<div class ="innerContainer" style="text-align: center; width: 100%;">');
     this.container.hide();
 
     this.menu = $('<div class="btn-group-vertical" role="group">');
