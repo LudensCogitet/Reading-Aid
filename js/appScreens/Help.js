@@ -22,14 +22,14 @@ class Help extends AppScreen{
                 '<p><p>'+
                 '(Note: Each set of flashcards is shuffled before play begins, as are the three sentences of each card, to ensure that the student does not simply memorize the patterns of the cards themselves.)'+
                 '<p>'+
-                'You will then be asked to choose how long it will take for each card to fade before the player is quizzed. Then, click the blue play button when you are ready to begin. '+
-                'After being quizzed on a card, click the blue play button again to advance to the next card.'+
+                'You will then be asked to choose how long it will take for each card to fade before the player is quizzed. Then, click the blue <i><b>play button</b></i> when you are ready to begin. '+
+                'After being quizzed on a card, click the blue <i><b>play button</b></i> again to advance to the next card.'+
                 '<p>'+
-                'Click the back button at any time to replay the previous card.'+
+                'Click the <i><b>back button</b></i> at any time to replay the previous card.'+
                 '<p>'+
-                'Click the reset button to reshuffle the current set of cards and start again.'+
+                'Click the <i><b>reset button</b></i> to reshuffle the current set of cards and start again.'+
                 '<p>'+
-                'After all cards have been played, the blue play button will become a stop button. Click this to return to the main menu.');
+                'After all cards have been played, the blue <i><b>play button</b></i> will become a <i><b>stop button</b></i>. Click this to return to the main menu.');
 
     this.container.append(title);
     this.container.append(text);
