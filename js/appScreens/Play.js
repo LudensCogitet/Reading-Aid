@@ -5,7 +5,6 @@ class Play extends AppScreen{
     this.duration = 5000;
 
     this.flashcardTarget = $('<div id="flashcardTarget"><h3>Click the play button to begin<h3></div>');
-    this.flashcardTarget.hide();
 
     this.cardSetName = null;
     this.cardSetData = null;
@@ -56,7 +55,6 @@ class Play extends AppScreen{
     this.menu.append(newMenuItem);
 
     this.buttonContainer = $('<div>');
-    this.buttonContainer.hide();
 
     var prevButton = $('<button id="prev" type="button" class="btn btn-default">'+
                             '<span class="glyphicon glyphicon-backward" aria-hidden="true"></span>'+
@@ -106,10 +104,15 @@ class Play extends AppScreen{
 
     this.buttonContainer.append(this.stopButton);
 
-
     this.container.append(this.menu);
-    this.container.append(this.flashcardTarget);
-    this.container.append(this.buttonContainer);
+
+    this.playContainer = $('<div>');
+    this.playContainer.hide();
+
+    this.playContainer.append(this.flashcardTarget);
+    this.playContainer.append(this.buttonContainer);
+
+    this.container.append(this.playContainer);
 
     this.parentDiv.append(this.container);
 
@@ -120,9 +123,7 @@ class Play extends AppScreen{
 
   startPlay(duration){
     this.duration = duration * 1000;
-    this.menu.hide();
-    this.flashcardTarget.show();
-    this.buttonContainer.show();
+    this.menu.fadeOut(this.FADESPEED,()=>{this.playContainer.fadeIn(this.FADESPEED);});
   }
 
   loadCard(cardIndex){
@@ -179,8 +180,7 @@ class Play extends AppScreen{
             this.currentCard = -1;
             this.currentCardSet = null;
             this.menu.show();
-            this.flashcardTarget.hide();
-            this.buttonContainer.hide();
+            this.playContainer.hide();
             this.flashcardTarget.html('<h3>Click the play button to begin<h3>');
             resolve('unloaded');
           }
