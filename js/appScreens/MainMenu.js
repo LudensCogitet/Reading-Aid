@@ -2,7 +2,7 @@ class MainMenu extends AppScreen{
   constructor(name, parentDiv, app){
     super(name, parentDiv, app);
 
-    var title = this.newTitle('FlashSight', 'A sight-reading aid');
+    var title = this.newTitle('FlashSight', 'A tool for learning readers');
 
     var newMenuItem = this.menuItem.clone();
     newMenuItem.text('New Flashcards');

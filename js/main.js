@@ -2,6 +2,7 @@ class App{
   constructor(rootDiv){
     this.menus = {'current': null,
                   'main': new MainMenu('main',rootDiv,this),
+                  'help': new Help('help',rootDiv, this),
                   'newCards': new NewCardsMenu('newCards',rootDiv,this),
                   'setSelect': new SetSelectMenu('setSelect',rootDiv,this),
                   'play': new Play('play',rootDiv,this),

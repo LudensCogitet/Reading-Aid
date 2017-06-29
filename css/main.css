@@ -6,7 +6,20 @@ body, html, .container{
   background-color: rgb(210,230,215);
 }
 
+#mainMenuButton, #helpButton{
+  position: absolute;
+  top: 0;
+}
+
 #mainMenuButton{
+  right: 0;
+}
+
+#helpButton{
+  left: 0;
+}
+
+.cornerMenuContainer{
   position: absolute;
   right: 0;
   top: 0;

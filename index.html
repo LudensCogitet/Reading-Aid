@@ -9,11 +9,13 @@
     <link href="css/main.css" rel="stylesheet">
   </head>
   <body>
-    <button type="button" class="btn btn-default" id="mainMenuButton" onclick='app.load("main")'>Main Menu</button>
     <div class="verticalCenter">
       <div class="container">
         <div class='row'>
-          <div class='col-md-8 col-md-offset-2' id='root'></div>
+          <div class='col-md-8 col-md-offset-2' id='root'>
+            <button type="button" class="btn btn-default" id="mainMenuButton" onclick='app.load("main")'>Main Menu</button>
+            <button type="button" class="btn btn-default" id="helpButton" onclick='app.load("help")'><span class='glyphicon glyphicon-info-sign'></span></button>
+          </div>
         </div>
       </div>
     </div>
@@ -21,6 +23,7 @@
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/appScreens/AppScreen.js"></script>
+    <script src="js/appScreens/Help.js"></script>
     <script src="js/appScreens/MainMenu.js"></script>
     <script src="js/appScreens/NewCards.js"></script>
     <script src="js/appScreens/SetSelect.js"></script>
@@ -29,6 +32,6 @@
     <script src="js/tools/Flashcard.js"></script>
     <script src="js/tools/shuffle.js"></script>
     <script src="js/main.js"></script>
-    <div style='position: absolute; font-size: 10pt; right: 0; bottom: 0'>Icons courtesy of <a href='https://glyphicons.com/'>Glyphicons</a></div>
+    <div style='position: fixed; font-size: 10pt; right: 0; bottom: 0'>Icons courtesy of <a href='https://glyphicons.com/'>Glyphicons</a></div>
   </body>
 </html>
