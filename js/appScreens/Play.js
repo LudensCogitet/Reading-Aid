@@ -39,6 +39,22 @@ class Play extends AppScreen{
 
     this.menu.append(newMenuItem);
 
+    newMenuItem = this.menuItem.clone();
+    newMenuItem.text('10');
+    newMenuItem.click(()=>{
+      this.startPlay(10);
+    });
+
+    this.menu.append(newMenuItem);
+
+    newMenuItem = this.menuItem.clone();
+    newMenuItem.text('15');
+    newMenuItem.click(()=>{
+      this.startPlay(15);
+    });
+
+    this.menu.append(newMenuItem);
+
     this.buttonContainer = $('<div>');
     this.buttonContainer.hide();
 

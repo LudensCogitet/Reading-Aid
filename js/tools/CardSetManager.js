@@ -69,8 +69,13 @@ class CardSetManager{
     return JSON.parse(localStorage.getItem('_flashSight_'+name));
   }
 
-  deleteCardSet(name){
-    if(confirm('Are use sure you wish to delete "'+name+'"?')){
+  deleteCardSet(name, shouldConfirm = true){
+    var doDelete = true;
+    if(shouldConfirm === true){
+      doDelete = confirm('Are use sure you wish to delete "'+name+'"?');
+    }
+
+    if(doDelete){
       this.updateSavedCardSetList(name,'remove');
       localStorage.removeItem('_flashSight_'+name);
       if(!localStorage.getItem('_flashSight_'+name))

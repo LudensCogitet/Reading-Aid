@@ -28,7 +28,7 @@ class NewCardsMenu extends AppScreen{
         }
         else{
           if(this.nameFieldOnLoad !== this.nameField.val()){
-            this.app.cardSetManager.deleteCardSet(this.nameFieldOnLoad);
+            this.app.cardSetManager.deleteCardSet(this.nameFieldOnLoad,false);
             this.nameFieldOnLoad = this.nameField.val();
           }
           alert('Card set updated') ;
