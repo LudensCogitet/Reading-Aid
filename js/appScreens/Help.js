@@ -4,9 +4,9 @@ class Help extends AppScreen{
 
     var title = this.newTitle('What is FlashSight', '');
     var text = $('<div style="text-align:left; font-size: 1.2em">');
-    text.append('FlashSight is a teaching tool designed to help learning readers practice recognizing similarities and differences between sentences at a glance.'+
+    text.append('FlashSight is a teaching tool designed to help learning readers practice recognizing similarities and differences between phrases at a glance.'+
                 '<p><p>'+
-                'Three sentences are displayed, one above the other, and then slowly fade away. After they disappear, a single one of those sentences appears along with three buttons. The goal is to click the button that corresponds to the displayed sentence’s former position among the three.'+
+                'Three phrases are displayed, one above the other, and then slowly fade away. After they disappear, a single one of those sentences appears along with three buttons. The goal is to click the button that corresponds to the displayed sentence’s former position among the three.'+
                 '<h3><b>How to Use This App</b></h3>'+
                 '(Note: Click the ‘Menu’ button at the top right to return to the main menu at any time).'+
                 '<h4><b>Making cards</b></h4>'+
