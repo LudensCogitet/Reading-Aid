@@ -8,7 +8,7 @@ class Help extends AppScreen{
                 '<p><p>'+
                 'Three sentences are displayed, one above the other, and then slowly fade away. After they disappear, a single one of those sentences appears along with three buttons. The goal is to click the button that corresponds to the displayed sentence’s former position among the three.'+
                 '<h3><b>How to Use This App</b></h3>'+
-                '(Note: Click the ‘Main Menu’ button at the top right to return to the main menu at any time).'+
+                '(Note: Click the ‘Menu’ button at the top right to return to the main menu at any time).'+
                 '<h4><b>Making cards</b></h4>'+
                 'FlashSight does not come with any pre-made sentence groups (flashcards). The teacher will have to enter them by clicking on the <i><b>New Flashcards</b></i> option on the main menu. Enter a name for your set of flashcards, then enter as many groups of three sentences as you wish. Each sentence must be on a new line, and each group must be separated by a blank line.'+
                 '<p><p>'+

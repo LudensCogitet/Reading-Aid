@@ -1,28 +1,14 @@
-body, html, .container{
+body, html, .container, .container-fluid{
   height: 100%;
+  width: 100%;
 }
 
-#root{
-  background-color: rgb(210,230,215);
+h2{
+  margin-top: 0;
 }
 
-#mainMenuButton, #helpButton{
-  position: absolute;
-  top: 0;
-}
-
-#mainMenuButton{
-  right: 0;
-}
-
-#helpButton{
-  left: 0;
-}
-
-.cornerMenuContainer{
-  position: absolute;
-  right: 0;
-  top: 0;
+textarea{
+  min-height: 60vh !important;
 }
 
 .verticalCenter {
@@ -33,6 +19,41 @@ body, html, .container{
   align-items: center;
 }
 
-textarea{
-  height: 500px !important;
+.cardText{
+  font-size: 25pt;
+}
+
+#root, #buttonBar{
+  background-color: rgb(210,230,215);
+  padding: 0;
+}
+
+#buttonBar{
+  z-index: 1000;
+}
+
+#helpButton{
+  float: left;
+}
+
+#mainMenuButton{
+  float: right;
+}
+
+@media (max-width: 767px){
+  .cornerButtonText{
+    display: none;
+  }
+  .cornerButtonIcon{
+    display: inline;
+  }
+}
+
+@media (min-width: 768px){
+  .cornerButtonText{
+    display: inline;
+  }
+  .cornerButtonIcon{
+    display: none;
+  }
 }

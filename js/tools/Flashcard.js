@@ -5,7 +5,7 @@ function Flashcard(sentences){
     card.show();
     card.empty();
 
-    workingSentences.forEach((el,index)=>{card.append($("<div data-index="+index+">"+el+"</div>"));});
+    workingSentences.forEach((el,index)=>{card.append($("<div data-index="+index+">"+el+"<div style='border: 2px solid black'></div></div>"));});
   }
 
   this.flash = (parentDiv, duration, callback)=>{
@@ -51,7 +51,7 @@ function Flashcard(sentences){
     $(parentDiv).append(card);
   }
 
-  var card = $('<div style="font-size: 20pt;" class="btn-group-vertical" role="group">');
+  var card = $('<div class="cardText btn-group-vertical" role="group">');
   var workingSentences = JSON.parse(JSON.stringify(sentences));
 
   shuffle(workingSentences);
